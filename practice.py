@@ -91,12 +91,17 @@ meann.backward() # calculate how we can change 'weight' to prevent less loss,
 # then we change 'weight', optimizer will see the 'grad' value and change 'weight' accordignly
 """
 
-from torch.utils.data import Dataset, DataLoader
-import torchvision.transforms as transforms
+from torch.utils.data import Dataset, DataLoader # how we want to load the data. each time 32 datas? 10 datas?
+import torchvision.transforms as transforms #transform is changing format. ex, image -> number tensor. 
 from torchvision import datasets
 # LOADING DATA 
-
-
-
-
-
+mnist_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=(0.5,), std=(1.0,))])
+# download MNIST dataset from online
+trainset = datasets.MNIST(root='./data', train=True, download=False, transform=mnist_transform)
+testset = datasets.MNIST(root='./data', train=False, download=False, transform=mnist_transform)
+train_loader = DataLoader(trainset, batch_size=8, shuffle=True, num_workers=0) 
+test_loader = DataLoader(testset, batch_size=8, shuffle=False, num_workers=0) 
+#dataiter = iter(train_loader)
+#images, labels = next(dataiter)
+#print(images.shape, labels.shape) # get torch.Size([8, 1, 28, 28]) torch.Size([8]).
+#meaning that, 8 is 8 batch size, 1 is blackwhite image, 28 x 28 size image
